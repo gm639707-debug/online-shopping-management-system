@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Cart</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; margin:0; padding:0; }
+    header { background: purple; color: white; padding: 15px; text-align: center; font-size: 22px; }
+    nav { display: flex; justify-content: center; background: pink; }
+    nav a { color: black; padding: 14px 20px; text-decoration: none; font-weight: bold; }
+    nav a:hover { color: purple; }
+
+    h1 { text-align: center; margin-top: 20px; }
+    ul { max-width: 500px; margin: auto; list-style: none; padding: 0; }
+    li { background: white; margin: 8px 0; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .total { font-weight: bold; text-align: center; margin-top: 20px; font-size: 18px; }
+    .empty { text-align: center; margin-top: 30px; font-size: 18px; color: gray; }
+    .clear-btn { display:block; margin:20px auto; padding:10px 15px; border:none; background:purple; color:white; border-radius:5px; cursor:pointer; }
+    .clear-btn:hover { background:pink; color:black; }
+  </style>
+</head>
+<body>
+
+  <header>
+    🛒 My Shopping Cart
+  </header>
+
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="electronics.html">Electronics</a>
+    <a href="clothes.html">Clothes</a>
+    <a href="groceries1.html">Groceries</a>
+    <a href="cart.html">Cart</a>
+  </nav>
+
+  <h1>Items in Your Cart</h1>
+  <ul id="cart-list"></ul>
+  <p class="total" id="cart-total">Total: $0.00</p>
+  <p class="empty" id="empty-msg"></p>
+  <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartList = document.getElementById("cart-list");
+    let total = 0;
+
+    if(cart.length === 0){
+      document.getElementById("empty-msg").textContent = "Your cart is empty 🛒";
+      document.getElementById("cart-total").style.display = "none";
+    } else {
+      cart.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = `${item.productName} - $${parseFloat(item.productPrice).toFixed(2)}`;
+        cartList.appendChild(li);
+        total += parseFloat(item.productPrice);
+      });
+      document.getElementById("cart-total").textContent = "Total: $" + total.toFixed(2);
+      document.getElementById("cart-total").style.display = "block";
+      document.getElementById("empty-msg").textContent = "";
+    }
+
+    function clearCart(){
+      if(confirm("Are you sure you want to clear your cart?")){
+        localStorage.removeItem("cart");
+        window.location.reload();
+      }
+    }
+  </script>
+
+</body>
+</html>
